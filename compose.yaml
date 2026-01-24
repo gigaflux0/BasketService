@@ -1,0 +1,9 @@
+﻿services:
+  basketserviceapi:
+    image: basketserviceapi
+    build:
+      context: .
+      dockerfile: src/BasketService.Api/Dockerfile
+    ports:
+      - "8080:8080"
+

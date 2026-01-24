@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasketService.Api", "src\BasketService.Api\BasketService.Api.csproj", "{1BD5E533-31CC-4266-922E-96123BAA262D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D7210AB6-4687-43EE-8D70-29D161484F3B}"
+	ProjectSection(SolutionItems) = preProject
+		compose.yaml = compose.yaml
+		README.md = README.md
+		openapi.yaml = openapi.yaml
+		Directory.Packages.props = Directory.Packages.props
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7E6D272D-4300-48E3-9F85-FD22BD714847}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasketService.Api.UnitTests", "tests\BasketService.Api.UnitTests\BasketService.Api.UnitTests.csproj", "{60855C4D-7D55-453B-AE80-7DAA059CBCEE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1BD5E533-31CC-4266-922E-96123BAA262D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BD5E533-31CC-4266-922E-96123BAA262D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BD5E533-31CC-4266-922E-96123BAA262D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BD5E533-31CC-4266-922E-96123BAA262D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60855C4D-7D55-453B-AE80-7DAA059CBCEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60855C4D-7D55-453B-AE80-7DAA059CBCEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60855C4D-7D55-453B-AE80-7DAA059CBCEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60855C4D-7D55-453B-AE80-7DAA059CBCEE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{60855C4D-7D55-453B-AE80-7DAA059CBCEE} = {7E6D272D-4300-48E3-9F85-FD22BD714847}
+	EndGlobalSection
+EndGlobal
