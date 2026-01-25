@@ -6,4 +6,13 @@
       dockerfile: src/BasketService.Api/Dockerfile
     ports:
       - "8080:8080"
+    depends_on:
+      - cosmosdb
 
+  cosmosdb:
+    image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-EN20251124
+    privileged: true
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "1234:1234"
