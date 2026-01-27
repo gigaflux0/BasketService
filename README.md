@@ -4,9 +4,26 @@
 
 This is a simple Basket Api used for managing an online shopping basket with discounts, taxes and shipping.
 
-## To Run
+---
 
-TODO
+## Run Instructions
+
+The easier way to run the api and database is with docker compose, from the root directory:
+````
+docker compose up --build
+````
+The Api can be seen at http://localhost:4321/scalar/
+
+The database can be seen at http://localhost:1234/
+
+---
+
+If you want to run all the tests to prove the integrity of the system, from the root directory:
+````
+dotnet test
+````
+
+---
 
 ## (Author self notes beyond this point)
 ## Plan

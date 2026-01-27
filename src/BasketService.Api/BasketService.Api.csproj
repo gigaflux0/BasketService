@@ -8,7 +8,15 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+        <PackageReference Include="Microsoft.Azure.Cosmos" />
         <PackageReference Include="Scalar.AspNetCore" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Application\Application.csproj" />
+      <ProjectReference Include="..\Infrastructure\CosmosDb\CosmosDb.csproj" />
+      <ProjectReference Include="..\Infrastructure\DiscountCodesApi\DiscountCodesApi.csproj" />
+      <ProjectReference Include="..\Infrastructure\PricesApi\PricesApi.csproj" />
     </ItemGroup>
 
 </Project>

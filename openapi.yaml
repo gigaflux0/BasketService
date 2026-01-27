@@ -3,49 +3,155 @@ info:
   title: BasketService.Api | v1
   version: 1.0.0
 servers:
-  - url: http://localhost:8080/
+  - url: http://localhost:4321/
 paths:
-  /weatherforecast:
-    get:
+  /basket/items:
+    post:
       tags:
         - BasketService.Api
-      operationId: GetWeatherForecast
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostBasketItemsRequest"
+        required: true
       responses:
         "200":
           description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/WeatherForecast"
+  /basket/items/{itemId}:
+    patch:
+      tags:
+        - BasketService.Api
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchBasketItemsByIdRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+  /basket/discount-code:
+    put:
+      tags:
+        - BasketService.Api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PutBasketDiscountCodeRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+  /basket/shipping/{countryCode}:
+    put:
+      tags:
+        - BasketService.Api
+      parameters:
+        - name: countryCode
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PutBasketShippingByCountryCodeRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+  /basket/totals:
+    get:
+      tags:
+        - BasketService.Api
+      parameters:
+        - name: basketId
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: countryCode
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
 components:
   schemas:
-    WeatherForecast:
+    Item:
       required:
-        - date
-        - temperatureC
-        - summary
+        - productId
+        - quantity
       type: object
       properties:
-        date:
+        productId:
           type: string
-          format: date
-        temperatureC:
+        quantity:
           pattern: ^-?(?:0|[1-9]\d*)$
           type:
             - integer
             - string
           format: int32
-        summary:
-          type:
-            - "null"
-            - string
-        temperatureF:
+    PatchBasketItemsByIdRequest:
+      required:
+        - basketId
+        - quantityDelta
+      type: object
+      properties:
+        basketId:
+          type: string
+        quantityDelta:
           pattern: ^-?(?:0|[1-9]\d*)$
           type:
             - integer
             - string
           format: int32
+    PostBasketItemsRequest:
+      required:
+        - basketId
+        - items
+      type: object
+      properties:
+        basketId:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Item"
+    PutBasketDiscountCodeRequest:
+      required:
+        - basketId
+        - discountCode
+      type: object
+      properties:
+        basketId:
+          type: string
+        discountCode:
+          type: string
+    PutBasketShippingByCountryCodeRequest:
+      required:
+        - basketId
+        - cost
+      type: object
+      properties:
+        basketId:
+          type: string
+        cost:
+          pattern: ^-?(?:0|[1-9]\d*)(?:\.\d+)?$
+          type:
+            - number
+            - string
+          format: double
 tags:
   - name: BasketService.Api

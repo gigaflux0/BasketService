@@ -1,6 +1,56 @@
-@BasketService_Api_HostAddress = http://localhost:8080
+@BasketService_Api_HostAddress = http://localhost:4321
+@BasketId = test-basket-123
 
-GET {{BasketService_Api_HostAddress}}/weatherforecast/
+###
+# Add items to basket
+POST {{BasketService_Api_HostAddress}}/basket/items
+Content-Type: application/json
+
+{
+  "basketId": "{{BasketId}}",
+  "items": [
+    { "productId": "A", "quantity": 1 },
+    { "productId": "B", "quantity": 2 }
+  ]
+}
+
+###
+
+# Adjust quantity of a specific item
+PATCH {{BasketService_Api_HostAddress}}/basket/items/A
+Content-Type: application/json
+
+{
+  "basketId": "{{BasketId}}",
+  "quantityDelta": 1
+}
+
+###
+
+# Apply discount code
+PUT {{BasketService_Api_HostAddress}}/basket/discount-code
+Content-Type: application/json
+
+{
+  "basketId": "{{BasketId}}",
+  "discountCode": "HALF"
+}
+
+###
+
+# Set shipping cost for a country
+PUT {{BasketService_Api_HostAddress}}/basket/shipping/GB
+Content-Type: application/json
+
+{
+  "basketId": "{{BasketId}}",
+  "shippingCost": 5.0
+}
+
+###
+
+# Get basket totals
+GET {{BasketService_Api_HostAddress}}/basket/totals?basketId={{BasketId}}&countryCode=GB
 Accept: application/json
 
 ###

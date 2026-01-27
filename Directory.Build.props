@@ -8,6 +8,10 @@
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="FluentResults" />
+    </ItemGroup>
+
     <PropertyGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('Tests'))">
         <IsTestProject>true</IsTestProject>
         <IsPackable>false</IsPackable>

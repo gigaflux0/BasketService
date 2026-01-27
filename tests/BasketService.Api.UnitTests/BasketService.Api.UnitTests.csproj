@@ -8,4 +8,8 @@
         <Using Include="NUnit.Framework"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\BasketService.Api\BasketService.Api.csproj" />
+    </ItemGroup>
+
 </Project>
