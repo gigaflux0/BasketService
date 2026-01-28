@@ -44,7 +44,7 @@ Content-Type: application/json
 
 {
   "basketId": "{{BasketId}}",
-  "shippingCost": 5.0
+  "cost": 5.0
 }
 
 ###

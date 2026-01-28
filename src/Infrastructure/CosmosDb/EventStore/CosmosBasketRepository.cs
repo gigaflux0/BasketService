@@ -8,18 +8,20 @@ namespace CosmosDb.EventStore;
 
 public class CosmosBasketRepository : IBasketRepository, IEventStreamReader
 {
-    private readonly CosmosClient _client;
+    private readonly Func<CosmosClient> _clientFactory;
     private readonly JsonSerializerOptions _jsonOptions;
 
     public CosmosBasketRepository(Func<CosmosClient> clientFactory)
     {
-        _client = clientFactory();
+        _clientFactory = clientFactory;
 
         _jsonOptions = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
     }
+
+    private CosmosClient Client => field ??= _clientFactory();
 
     public async Task<IReadOnlyList<IBasketEvent>> LoadEventsAsync(
         string streamId,
@@ -98,7 +100,7 @@ public class CosmosBasketRepository : IBasketRepository, IEventStreamReader
 
     private async Task<Container> GetBasketEventsContainer()
     {
-        Database database = await _client.CreateDatabaseIfNotExistsAsync(id: "BasketDb");
+        Database database = await Client.CreateDatabaseIfNotExistsAsync(id: "BasketDb");
         var containerProperties = new ContainerProperties("basketEvents", "/StreamId");
         return await database.CreateContainerIfNotExistsAsync(containerProperties);
     }

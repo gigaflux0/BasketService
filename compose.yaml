@@ -1,16 +1,16 @@
 ﻿services:
-  basketserviceapi:
-    image: basketserviceapi
-    build:
-      context: .
-      dockerfile: src/BasketService.Api/Dockerfile
-      target: final
-    ports:
-      - "4321:4321"
-    depends_on:
-      - cosmosdb
-    environment:
-      Cosmos__ConnectionString: "AccountEndpoint=http://cosmosdb:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;"
+#  basketserviceapi:
+#    image: basketserviceapi
+#    build:
+#      context: .
+#      dockerfile: src/BasketService.Api/Dockerfile
+#      target: final
+#    ports:
+#      - "4321:4321"
+#    depends_on:
+#      - cosmosdb
+#    environment:
+#      Cosmos__ConnectionString: "AccountEndpoint=http://cosmosdb:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;"
 
   cosmosdb:
     image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-EN20251124

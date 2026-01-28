@@ -7,12 +7,14 @@ namespace CosmosDb.ReadModel;
 
 public class CosmosBasketReadModelRepository : IBasketReadModelRepository
 {
-    private readonly CosmosClient _client;
+    private readonly Func<CosmosClient> _clientFactory;
 
     public CosmosBasketReadModelRepository(Func<CosmosClient> clientFactory)
     {
-        _client = clientFactory();
+        _clientFactory = clientFactory;
     }
+
+    private CosmosClient Client => field ??= _clientFactory();
 
     public async Task<BasketReadModel?> GetAsync(string basketId, CancellationToken ct)
     {
@@ -42,7 +44,7 @@ public class CosmosBasketReadModelRepository : IBasketReadModelRepository
 
     private async Task<Container> GetReadModelContainerAsync()
     {
-        var db = await _client.CreateDatabaseIfNotExistsAsync("BasketDb");
+        var db = await Client.CreateDatabaseIfNotExistsAsync("BasketDb");
 
         var props = new ContainerProperties(
             id: "basketReadModels",
@@ -53,5 +55,4 @@ public class CosmosBasketReadModelRepository : IBasketReadModelRepository
 
         return containerResponse.Container;
     }
-
 }

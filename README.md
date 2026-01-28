@@ -8,13 +8,29 @@ This is a simple Basket Api used for managing an online shopping basket with dis
 
 ## Run Instructions
 
-The easier way to run the api and database is with docker compose, from the root directory:
+Due to a limitation in the new CosmosDB emulator we can only partly use docker compose.
+To get the database up and running, pull down the latest main branch and use docker compose, from the root directory:
 ````
 docker compose up --build
 ````
-The Api can be seen at http://localhost:4321/scalar/
-
 The database can be seen at http://localhost:1234/
+
+To then get the Api running go to the release page in GitHub here and download either the zip or tarball depending on 
+which OS you want to launch from. We need to run a pre published version as the limitation mentioned earlier prevents the 
+api and DB talking to each other when they both live in docker. Once decompressed from the root directory:
+
+For Linux:
+```
+cd ./linux-x64/publish
+./BasketService.Api
+```
+
+For Windows:
+```
+cd win-x64/publish
+.\BasketService.Api.exe
+```
+The Api can then be seen at http://localhost:5000/scalar/
 
 ---
 
@@ -25,7 +41,25 @@ dotnet test
 
 ---
 
-## (Author self notes beyond this point)
+## Assumptions made
+
+- Remove an item from the basket means one quantity of that item, not the whole thing
+- Adding and removing items, discount codes and getting totals is likely called by a front end
+    - However setting shipping is called by a trusted authenticated backend
+    - On the frontend writes, don't trust the caller to give pricing information
+    - We need a place in the backend to reference prices and discount code information, real world would likely be other api's, treat it this way but keep it simple in implementation.
+- Discounted items have their discount applied to all items of that name
+- We want to store shipping prices for multiple countries
+- VAT is applied to shipping
+- Discount code is applied before shipping and VAT
+- Total = ((discounted prices * quantity) + (non discounted prices * quantity * (1 - discountCode)) + shipping) * 1.2
+
+---
+
+## (Author self design notes beyond this point)
+
+---
+
 ## Plan
 ### Criteria
 ##### We would like you to develop a REST based Web API for an example online shopping basket that has the following features:
@@ -43,56 +77,59 @@ dotnet test
 - Add shipping cost to the UK
 - Add shipping cost to other countries
 
-### Assumptions
-- Remove an item from the basket means one quantity of that item, not the whole thing
-- Adding and removing items, discount codes and getting totals is likely called by a front end
-    - However setting shipping is called by a trusted authenticated backend
-    - On the frontend writes, don't trust the caller to give pricing information
-    - We need a place in the backend to reference prices and discount code information, real world would likely be other api's, treat it this way but keep it simple in implementation.
-- Discounted items have their discount applied to all items of that name
-- We want to store shipping prices for multiple countries
-- VAT is applied to shipping
-- Discount code is applied before shipping and VAT
-- Total = ((discounted prices * quantity) + (non discounted prices * quantity * (1 - discountCode)) + shipping) * 1.2
 
 ### Api
 Domain: basket
-
+````
 POST /basket/items
-[
-    {
-        "productId": "123",
-        "quantity": 1
-    },
-    {
-        "productId": "456",
-        "quantity": 3
-    },
-    {
-        "productId": "123",
-        "quantity": 2
-    }
-]
+{
+    "basketId": "abc",
+    "items": [
+        {
+            "productId": "123",
+            "quantity": 1
+        },
+        {
+            "productId": "456",
+            "quantity": 3
+        },
+        {
+            "productId": "123",
+            "quantity": 2
+        }
+    ]
+}
 
 PATCH /basket/items/123
 {
+    "basketId": "abc",
     "quantityDelta": -1
 }
 
-GET /basket/totals?country=GB //required
+GET /basket/totals?basketId=abc&countryCode=GB
+response:
 {
-    "subtotal": 50.00,
-    "vatAmount": 10.00,
-    "totalWithVat": 60.00
+    "subtotalBeforeDiscounts": 60,
+    "itemDiscounts": 12,
+    "discountCodeAmount": 0,
+    "subtotalAfterDiscounts": 48,
+    "vatOnItems": 9.6,
+    "shippingCost": 12,
+    "shippingVat": 2.4,
+    "totalWithoutVat": 60,
+    "totalWithVat": 72,
+    "totalSavings": 12
 }
 
 PUT /basket/discount-code
 {
-    "code": "BLEH"
+    "basketId": "abc",
+    "code": "HALF"
 }
 
 PUT /basket/shipping/{countryCode}
 {
+    "basketId": "abc",
     "cost": 2.50
 }
 
@@ -143,6 +180,7 @@ basket:
         "totalSavings": 5.50
     },
 }
+````
 
 ## Architecture
 - Name: BasketService
@@ -155,6 +193,7 @@ basket:
     - Will just store data in tables
 - No need for integration events or message broker
 
+````
 Layout:
 Temp
 -> Temp.sln
@@ -172,3 +211,4 @@ Temp
 -> tests/
 -> openApiSpec
 -> dockerCompose
+````
